@@ -15,36 +15,55 @@ function getHumanChoice(){
     return humanValue;
 }
 function playRound(computerChoice,humanChoice){
+    const list=document.querySelector("ul");
+    const outcome=document.createElement("li");
     humanChoice=humanChoice.toLowerCase();
     if(computerChoice=="scissor" && humanChoice=="paper"){
-        console.log("You lose! scissor beats paper");
+        outcome.textContent="You lose! scissor beats paper";
+        console.log("You lose! scissor beats paper")
         computerScore++;
     }
     else if(computerChoice=="paper" && humanChoice=="scissor"){
+        outcome.textContent="You win! scissor beats paper";
         console.log("You win! scissor beats paper");
         humanScore++;
     }
     else{
         if(computerChoice>humanChoice){
+            outcome.textContent=`You win! ${humanChoice} beats ${computerChoice}`;
             console.log(`You win! ${humanChoice} beats ${computerChoice}`);
             humanScore++;
         }
         else if(computerChoice<humanChoice){
+            outcome.textContent=`You lose! ${computerChoice} beats ${humanChoice}`;
             console.log(`You lose! ${computerChoice} beats ${humanChoice}`);
             computerScore++;
         }
         else{
+            outcome.textContent="Its a draw!";
             console.log("Its a draw!");
         }
     }
-}
-function playGame(){
-    for(let x=0;x<5;x++){
-        playRound(getComputerChoice(),getHumanChoice());
+    list.appendChild(outcome);
+    const p=document.querySelector("p");
+    p.textContent=`${humanScore}-${computerScore}`;
+    if(humanScore==5){
+        const body=document.querySelector("body");
+        const heading=document.createElement("h3");
+        heading.textContent='YOU WIN!!';
+        body.appendChild(heading);
+    }
+    else if(computerScore==5){
+        const body=document.querySelector("body");
+        const heading=document.createElement("h3");
+        heading.textContent='YOU LOST!!';
+        body.appendChild(heading);
     }
 }
 let humanScore=0,computerScore=0;
-playGame();
-if(humanScore>computerScore) console.log("You won!");
-else if(humanScore<computerScore) console.log("You lost!");
-else console.log("It's a draw!");
+const button=document.querySelectorAll("button");
+button.forEach(btn=>{
+    btn.addEventListener("click",(e)=>{
+        playRound(getComputerChoice(),e.target.textContent);
+    });
+});
